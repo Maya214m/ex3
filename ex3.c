@@ -75,6 +75,9 @@ int main() {
             case deltas: // Calculate and display average delta metrics
                  provideAverageDeltaMetrics(cube, days);
                  break;
+            case done;
+            printf("Goodbye!\n");
+            break;
               
             default:
                 printf("Invalid input\n");
