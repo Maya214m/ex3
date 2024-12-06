@@ -61,10 +61,10 @@ int main() {
                 enterDailyDataForBrand(cube, days);
                 break;
             case addAll: // Populate data for all brands in a single day
-                populateDayOfSales(cube, days, &currenetDay);
+                populateDayOfSales(cube, days, &currentDay);
                 break;
             case stats: // Provide daily statistics
-                 provideDailyStats(cube, currenetDay);
+                 provideDailyStats(cube, currentDay);
                  break;
             case print: // Print all stored data
                  printAllData(cube, days);
@@ -82,6 +82,39 @@ int main() {
         printMenu();
         scanf("%d", &choice);
     }
+    // Function Definitions
+
+    void enterDailyDataForBrand(int cube[DAYS_IN_YEAR][NUM_OF_BRAND][NUM_OF_TYPES], int days[NUM_OF_BRANDS]) {
+        int brandIndex, sales[NUM_OF_TYPES];
+
+        printf("Enter the brand index (0-4): ");
+        scanf("%d", &brandIndex);
+
+        if (brandIndex < 0 || brandIndex >= NUM_OF_BRANDS) {
+            printf("This brand is not valid\n");
+            return;
+        }
+        printf("Enter the daily sales for SUV, Sedan, Coupe, and GT: ");
+        for (int i = 0; i < NUM_OF_TYPES; i++) {
+            scanf("%d", &sales[i]);
+        }
+        int currenetDay = days[brandIndex];
+        if (currenetDay >= DAYS_IN_YEAR) {
+            printf("No more days available for this brand.\n");
+            return;
+        }
+        for (int i = 0; i < NUM_OF_TYPES; i++) {
+            cube[currentDay][brandIndex][i] = sales[i];
+        }
+        days[brandIndex]++;
+        printf("Data for brand %s entered successfully for day %d.\n", brands[brandIndex], currentDay);
+    }
+    void populateDayOfSales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES], int currentDay);
+            int sales[NUM_OF_TYPES];
+
+            printf("Populating sales for all brands on day %d:\n", *currentDay + 1);
+            for (int brand = 0; brand < NUM_OF_BRANDS; brand++)
+            
     printf("Goodbye!\n");
     return 0;
 }
