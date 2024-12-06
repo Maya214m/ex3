@@ -82,8 +82,10 @@ int main() {
             default:
                 printf("Invalid input\n");
         }
+        if (choice != done) { // Show the menu again if the user hasn't existed 
         printMenu();
         scanf("%d", &choice);
+        }
     }
     // Function Definitions
 
@@ -112,14 +114,27 @@ int main() {
         days[brandIndex]++;
         printf("Data for brand %s entered successfully for day %d.\n", brands[brandIndex], currentDay);
     }
-    void populateDayOfSales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES], int currentDay);
+    void populateDayOfSales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES], int days[NUM_OF_BRANDS], int *currentDay) {
             int sales[NUM_OF_TYPES];
 
             printf("Populating sales for all brands on day %d:\n", *currentDay + 1);
-            for (int brand = 0; brand < NUM_OF_BRANDS; brand++)
+            for (int brand = 0; brand < NUM_OF_BRANDS; brand++) {
+                printf("Enter sales for %s (SUV, Sedan, Coupe, GT): ", brands[brand]);
+                for (int i = 0; i < NUM_OF_TYPES; i++) {
+                    scanf("%d", &sales[i]);
+                    cube[*currentDay][brand[i]] = sales [i];
+                }
+            }
+            (*currentDay)++;
+            printf("Sales for day %d populated successfully.\n, *currentDay);
+  }
+  void
+
+
+    
             
     printf("Goodbye!\n");
     return 0;
-}
+
 
 
