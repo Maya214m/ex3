@@ -51,13 +51,14 @@ int main() {
   // A 3D array to store sales data
   int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES] = {{{-1}}};
   int days[NUM_OF_BRANDS] = {0};
-  int currentDay = 0; // Tracks the overall current day
+  int currentDay = 0;
   int choice;
-  while (1) {
-  // Print the menu initially
-  printMenu();
-  scanf("%d", &choice);
-    // Process the choice
+
+  // Menu loop: Continue until the user enters 7 to exit
+  do {
+    printMenu();
+    scanf("%d", &choice);
+
     switch(choice){
       case addOne: // Enter data for a single brand
         enterDailyDataForBrand(cube, days);
@@ -79,28 +80,26 @@ int main() {
       break;
       case done:
         printf("Goodbye!\n");
-        return 0;
       break;
       default:
         printf("Invalid input\n");
+      break;
     }
-  }
+  } while (choice != done);
+  return 0;
 }
-    // Function Definitions
-
     // enterDailyDataForBrand function
     void enterDailyDataForBrand(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES], int days[NUM_OF_BRANDS]) {
         int brandIndex, sales[NUM_OF_TYPES];
 
         // Input brand index and sales data for SUV, Sedan, Coupe, GT
-        scanf("%d %d %d %d %d", &brandIndex, &sales[0], &sales[1], &sales[2], &sales[3]);
+  scanf("%d %d %d %d %d", &brandIndex, &sales[0], &sales[1], &sales[2], &sales[3]);
 
         // Validate the brand index
         if (brandIndex < 0 || brandIndex >= NUM_OF_BRANDS) {
             printf("This brand is not valid\n");
             return;
         }
-
         // Insert sales data into the cube for the next availabe day
         int currentDay = days[brandIndex];
         for (int i = 0; i < NUM_OF_TYPES; i++) {
@@ -115,7 +114,6 @@ int main() {
 
         while (completedBrands < NUM_OF_BRANDS) {
           int missingBrands = 0;
-
           // Print missing brands
           printf("No data for brands ");
           for (int i = 0; i < NUM_OF_BRANDS; i++) {
@@ -128,10 +126,9 @@ int main() {
           if (missingBrands == 0) {
             break;
         }
-
       printf("\nPlease complete the data\n");
-
-       // Prompt the user to enter data for a missing brand
+      
+     // Prompt the user to enter data for a missing brand
       enterDailyDataForBrand(cube, days);
           completedBrands++;
       }
@@ -145,6 +142,7 @@ int main() {
       while (1) {
         printf("What day would you like to analyze?\n");
         scanf("%d", &day);
+        day -= 1;
 
         // In case the user entered a bad day ask to enter a valid day
         if (day < 0 || day >= currentDay) {
@@ -167,8 +165,7 @@ int main() {
           brandSales[brand] += sales;
           typeSales[type] += sales;
         }
-      }
-
+      }      
        // Find the best-selling brand and type
        for (int brand = 0; brand < NUM_OF_BRANDS; brand++) {
          if (brandSales[brand] > bestBrandSales) {
@@ -182,9 +179,8 @@ int main() {
            bestTypeSales = typeSales[type];
          }
        }
-
       // Print the results
-      printf("In day number %d:\n", day);
+      printf("In day number %d:\n", day + 1);
       printf("The sales total was %d\n", totalSales);
       printf("The best sold brand with %d sales was %s\n", bestBrandSales, brands[bestBrand]);
       printf("The best sold type with %d sales was %s\n ", bestTypeSales, types[bestType]);
@@ -194,23 +190,22 @@ int main() {
     // printAllData function to print the data cube
     void printAllData(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES], int days[NUM_OF_BRANDS]) {
         printf("*****************************************\n");
-
+        printf("\n");
         // Loop through all brands
         for (int brand = 0; brand < NUM_OF_BRANDS; brand++) {
-          printf("Sales for %s:\n", brands[brand]);
-
+          printf("Sales for %s: \n", brands[brand]);
         // Loop through all days up to the latest day for this brand
         for (int day = 0; day < days[brand]; day++) {
-          printf("Day %d -", day + 1);
-
+          printf("Day %d- ", day + 1);
           // Print sales for each type of car
           for (int type = 0; type < NUM_OF_TYPES; type++) {
-            printf("%s: %d", types[type], cube[day][brand][type]);
+            printf("%s: %d ", types[type], cube[day][brand][type]);
           }
           printf("\n");
         }
          printf("\n");
         }
+        printf("\n");
         printf("*****************************************\n");
     }
 
@@ -230,7 +225,7 @@ int main() {
       for (int brand = 0; brand < NUM_OF_BRANDS; brand++) {
         for (int type = 0; type < NUM_OF_TYPES; type++) {
           int sales = cube[day][brand][type];
-
+            
           // Add sales to brand, type, and day totals
           totalBrandSales[brand] += sales;
           totalTypeSales[type] += sales;
@@ -277,15 +272,15 @@ int main() {
       continue;
     }
     // Compute total sales difference between consecutive days
-    for (int day = 0; day < numDays; day++) {
+    for (int day = 1; day < numDays; day++) {
       int saleDay1 = 0, saleDay2 = 0;
-
       // Calculate total sales for the brand in two consecutive days
       for (int type = 0; type < NUM_OF_TYPES; type++) {
         saleDay1 += cube[day - 1][brand][type];
         saleDay2 += cube[day][brand][type];
       }
-      totalDelta += (saleDay2 - saleDay1); // Add difference to total delta
+      // Add difference to total delta
+      totalDelta += (saleDay2 - saleDay1);
     }
     // Calculate average delta
     float averageDelta = (float)totalDelta / (numDays - 1);
